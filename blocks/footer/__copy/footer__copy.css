@@ -1,11 +1,9 @@
 .footer__copy{
-    font-family: Inter;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     line-height: 22px;
     color: #545454;
-
     margin: 0 27px 0 27px;
     padding: 0;
 }

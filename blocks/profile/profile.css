@@ -7,6 +7,7 @@
 @import url(./__add-button/profile__add-button.css);
 
 .profile {
+    font-family: Inter, Arial, sans-serif;
     display: flex;
     justify-content: space-between;
     margin: 36px 0 0 0;

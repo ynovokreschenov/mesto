@@ -1,6 +1,7 @@
 @import url(./__copy/footer__copy.css);
 
 .footer {
+    font-family: Inter, Arial, sans-serif;
     max-width: 936px; /* 882px + 27 + 27 */
     min-width: 320px;
     width: 100%;

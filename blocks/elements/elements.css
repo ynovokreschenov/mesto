@@ -1,10 +1,5 @@
-@import url(./__item/elements__item.css);
-@import url(./__image/elements__image.css);
-@import url(./__text/elements__text.css);
-@import url(./__title/elements__title.css);
-@import url(./__like/elements__like.css);
-
 .elements {
+    font-family: Inter, Arial, sans-serif;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 18px;

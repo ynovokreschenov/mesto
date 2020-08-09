@@ -8,17 +8,17 @@ let editButton = document.querySelector('.profile__edit-button');
 let editProfilePopup = document.querySelector('.popup');
 let closePopupButton = document.querySelector('.popup__close');
 // атрибуты формы попапа
-let popupTitle = document.querySelector('.popup__title');
-let popupSubtitle = document.querySelector('.popup__subtitle');
+let popupTitle = document.querySelector('input[name="popup_title"]');
+let popupSubtitle = document.querySelector('input[name="popup_subtitle"]');
 // элемент формы попапа
 let formElement = document.querySelector('.popup__form');
 
 // ФУНКЦИИ
-function closeEditPrifileForm(){
+function closeEditProfileForm(){
     editProfilePopup.classList.remove('popup_opened');
 }
 
-function editPrifile(){
+function editProfile(){
     editProfilePopup.classList.add('popup_opened');
     popupTitle.value = profileTitle.textContent
     popupSubtitle.value = profileSubtitle.textContent
@@ -29,7 +29,7 @@ function formSubmitHandler(evt){
     // Так мы можем определить свою логику отправки.
     profileTitle.textContent = popupTitle.value
     profileSubtitle.textContent = popupSubtitle.value
-    editProfilePopup.classList.remove('popup_opened');
+    closeEditProfileForm()
 }
 
 // ХЕНДЛЕРЫ
@@ -37,6 +37,6 @@ function formSubmitHandler(evt){
 // он будет следить за событием “submit” - «отправка»
 formElement.addEventListener('submit', formSubmitHandler);
 // открывает окно попапа
-editButton.addEventListener('click', editPrifile);
+editButton.addEventListener('click', editProfile);
 // закрытие окна попапа без сохранения данных
-closePopupButton.addEventListener('click', closeEditPrifileForm);
+closePopupButton.addEventListener('click', closeEditProfileForm);
