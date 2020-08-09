@@ -1,0 +1,27 @@
+.elements__title {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 29px;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+
+    max-width: 190px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 768px) { /* 768px */
+    .elements__title {
+        max-width: 180px;
+    }
+}
+
+@media screen and (max-width: 475px) { /* 425 */
+    .elements__title {
+        max-width: 160px;
+    }
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./pages/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesto</title>
+</head>
+<body>
+    <div class="page">
+        <header class="header">
+            <img class="header__logo" src="images/logo.svg" alt="Логотип">
+            <img class="header__line" src="images/line.svg" alt="Линия">
+        </header>
+        <main class="content">
+            <div class="profile">
+                <img class="profile__avatar" src="images/image.jpg" alt="Жак-Ив Кусто">
+                <div class="profile__info">
+                    <div class="profile__title-wrap">
+                        <h1 class="profile__title">Жак-Ив Кусто</h1>
+                        <img class="profile__edit-button" src="images/edit_button.svg" alt="Редактировать профиль">
+                    </div>
+                    <p class="profile__subtitle">Исследователь океана</p>
+                </div>
+                <div class="profile__add-button"></div>
+            </div>
+            <div class="elements">
+                <div class="elements__item">
+                    <img class="elements__image" src="./images/kirill-pershin-1088404-unsplash.jpg" alt="Карачаевск">
+                    <div class="elements__text">
+                        <h3 class="elements__title">Карачаевск</h3>
+                        <div class="elements__like"></div>
+                    </div>
+                </div>
+                <div class="elements__item">
+                    <img class="elements__image" src="./images/kirill-pershin-1404681-unsplash.png" alt="Карачаевск">
+                    <div class="elements__text">
+                        <h3 class="elements__title">Гора Эльбрус</h3>
+                        <div class="elements__like"></div>
+                    </div>
+                </div>
+                <div class="elements__item">
+                    <img class="elements__image" src="./images/kirill-pershin-1556355-unsplash.png" alt="Карачаевск">
+                    <div class="elements__text">
+                        <h3 class="elements__title">Домбай</h3>
+                        <div class="elements__like"></div>
+                    </div>
+                </div>
+                <div class="elements__item">
+                    <img class="elements__image" src="./images/kirill-pershin-1404681-unsplash.png" alt="Карачаевск">
+                    <div class="elements__text">
+                        <h3 class="elements__title">Гора Эльбрус</h3>
+                        <div class="elements__like"></div>
+                    </div>
+                </div>
+                <div class="elements__item">
+                    <img class="elements__image" src="./images/kirill-pershin-1556355-unsplash.png" alt="Карачаевск">
+                    <div class="elements__text">
+                        <h3 class="elements__title">Домбай</h3>
+                        <div class="elements__like"></div>
+                    </div>
+                </div>
+                <div class="elements__item">
+                    <img class="elements__image" src="./images/kirill-pershin-1088404-unsplash.jpg" alt="Карачаевск">
+                    <div class="elements__text">
+                        <h3 class="elements__title">Карачаево-Черкессия</h3>
+                        <div class="elements__like"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="footer">
+            <p class="footer__copy">&copy; 2020 Mesto Russia</p>
+        </footer>
+    </div>
+    <div class="popup">
+        <div class="popup__shade"></div>
+        <img class="popup__close" src="images/close_icon.png" alt="Закрыть">
+        <form class="popup__form">
+            <div class="popup__header">Редактировать профиль</div>
+            <input type="text" class="popup__title" value="">
+            <div class="popup__form-noun"></div>
+            <input type="text" class="popup__subtitle" value="">
+            <div class="popup__form-noun"></div>
+            <button type="submit" class="popup__button">
+                <p class="popup__button-text">Сохранить</p>
+            </button>
+        </form>
+    </div>
+<script src="scriprs/script.js"></script>
+</body>
+</html>

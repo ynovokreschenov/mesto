@@ -1,0 +1,10 @@
+.profile__title-wrap {
+    display: flex;
+    align-items: baseline;
+}
+
+@media screen and (max-width: 768px) {
+    .profile__title-wrap {
+        margin: 10.25px 0 0 0;  
+    }
+}

@@ -1,0 +1,16 @@
+@import url(./__copy/footer__copy.css);
+
+.footer {
+    max-width: 936px; /* 882px + 27 + 27 */
+    min-width: 320px;
+    width: 100%;
+
+    margin: 66px 0 60px 0;
+    display: flex;
+}
+
+@media screen and (max-width: 425px) {
+    .footer {
+        margin: 48px 0 36px 0;
+    }
+}

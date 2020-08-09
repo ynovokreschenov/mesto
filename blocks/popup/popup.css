@@ -1,0 +1,17 @@
+@import url(./__close/popup__close.css);
+@import url(./__form/popup__form.css);
+@import url(./__form-noun/popup__form-noun.css);
+@import url(./__header/popup__header.css);
+@import url(./__title/popup__title.css);
+@import url(./__subtitle/popup__subtitle.css);
+@import url(./__button/popup__button.css);
+@import url(./__button-text/popup__button-text.css);
+@import url(./__shade/popup__shade.css);
+
+.popup {
+    display: none;
+}
+
+.popup_opened {
+    display: block;
+}
