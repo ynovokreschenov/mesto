@@ -5,7 +5,7 @@
     max-width: 936px; /* 882px + 27 + 27 */
     min-width: 320px;
     width: 100%;
-
+    flex-shrink: 0;
     margin: 66px 0 60px 0;
     display: flex;
 }
