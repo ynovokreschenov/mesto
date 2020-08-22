@@ -4,8 +4,14 @@
 @import url(./__text/popup__text.css);
 @import url(./__button/popup__button.css);
 @import url(./__shade/popup__shade.css);
+@import url(./__place/popup__place.css);
+@import url(./__image/popup__image.css);
+@import url(./__image_title/popup__image_title.css);
+@import url(./__close_image/popup__close_image.css);
 
 .popup {
     font-family: Inter, Arial, sans-serif;
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.5s, opacity 0.5s linear;
 }
