@@ -42,7 +42,7 @@
     </template>
     <section class="popup" id="edit_profile">
         <div class="popup__shade"></div>
-        <button type="button" class="popup__close" aria-label="Закрыть" id="popup__close"></button>
+        <button type="button" class="popup__close" aria-label="Закрыть"></button>
         <form class="popup__form" name="popup_form">
             <h3 class="popup__header">Редактировать профиль</h3>
             <input type="text" class="popup__text" name="popup_title" value="" required>
@@ -52,7 +52,7 @@
     </section>
     <section class="popup" id="add_place">
         <div class="popup__shade"></div>
-        <button type="button" class="popup__close" aria-label="Закрыть" id="popup__close"></button>
+        <button type="button" class="popup__close" aria-label="Закрыть"></button>
         <form class="popup__form" name="popup_form">
             <h3 class="popup__header">Новое место</h3>
             <input type="text" class="popup__text" name="place-name" value="" placeholder="Название" required>
@@ -63,9 +63,9 @@
     <section class="popup" id="image_view">
         <div class="popup__shade"></div>
         <div class="popup__place">
-            <button type="button" class="popup__close_image" aria-label="Закрыть" id="popup__close"></button>
-            <img class="popup__image" src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg" alt="">
-            <p class="popup__image_title">Архыз</p>
+            <button type="button" class="popup__close popup__close_image" aria-label="Закрыть"></button>
+            <img class="popup__image" src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg" alt="Архыз">
+            <p class="popup__imagetitle">Архыз</p>
         </div>
     </section>
 <script src="scripts/script.js"></script>
