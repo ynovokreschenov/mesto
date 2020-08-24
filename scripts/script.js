@@ -29,15 +29,15 @@ const initialCards = [
 // редактирование профиля
 const popupEditProfile = document.querySelector('#edit_profile'); // попап профиля
 const buttonEditProfile = document.querySelector('.profile__edit-button'); // кнопка открытия формы профиля
-let profilePopupFormTitle = document.querySelector('input[name="popup_title"]'); // имя в попап форме
-let profileTitle = document.querySelector('.profile__title'); // имя профиля на странице
-let profileSubtitle = document.querySelector('.profile__subtitle');
-let profilePopupFormSubitle = document.querySelector('input[name="popup_subtitle"]'); // профессия в попап форме
+const profilePopupFormTitle = document.querySelector('input[name="popup_title"]'); // имя в попап форме
+const profileTitle = document.querySelector('.profile__title'); // имя профиля на странице
+const profileSubtitle = document.querySelector('.profile__subtitle');
+const profilePopupFormSubitle = document.querySelector('input[name="popup_subtitle"]'); // профессия в попап форме
 
 // добавление карточек
-let cardElements = document.querySelector('.elements'); // блок, содержащий карточки
-let cardPlaceName = document.querySelector('input[name="place-name"]'); // элемент название места на форме добавления карточки
-let cardPlaceLink = document.querySelector('input[name="place-link"]') // элемент ссылка на фото на форме добавления карточки
+const cardElements = document.querySelector('.elements'); // блок, содержащий карточки
+const cardPlaceName = document.querySelector('input[name="place-name"]'); // элемент название места на форме добавления карточки
+const cardPlaceLink = document.querySelector('input[name="place-link"]') // элемент ссылка на фото на форме добавления карточки
 const popupAddPlace = document.querySelector('#add_place'); // попап добавления карточки
 const popupPlaceView = document.querySelector('#image_view'); // попап просмотра фотографии
 const buttonAddPlace = document.querySelector('.profile__add-button'); // кнопка открытия формы добавления карточки
@@ -69,8 +69,9 @@ function openPlaceView(event) {
 function createCard(card){
     const cardElement = document.querySelector('#card_template').content.cloneNode(true);
     cardElement.querySelector('.element__title').textContent = card.name;
-    cardElement.querySelector('.element__image').src = card.link;
-    cardElement.querySelector('.element__image').alt = card.name;
+    const elementImage = cardElement.querySelector('.element__image');
+    elementImage.src = card.link;
+    elementImage.alt = card.name;
     // обработчик лайка для cardElement
     cardElement.querySelector('.element__like').addEventListener('click', (evt) => {
         evt.target.classList.toggle('element__like_active');
@@ -82,8 +83,9 @@ function createCard(card){
 
     // обработчик для кнопки удаления карточки
     cardElement.querySelector('.element__image').addEventListener('click', (evt) => {
-        document.querySelector('.popup__image').src = card.link,
-        document.querySelector('.popup__image').alt = card.name,
+        const popupImage = document.querySelector('.popup__image');
+        popupImage.src = card.link,
+        popupImage.alt = card.name,
         document.querySelector('.popup__imagetitle').textContent = card.name,
         openPlaceView(evt);
     });
