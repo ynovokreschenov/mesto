@@ -1,0 +1,14 @@
+.popup__form-set {
+    border: 1px;
+    width: 358px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+}
+
+@media screen and (max-width: 475px) {
+    .popup__form-set {
+        width: 280px;
+    }
+}

@@ -46,6 +46,18 @@ const buttonAddPlace = document.querySelector('.profile__add-button'); // кно
 // функция, которая делает видимым или скрытым тот попап, который передан ей в качестве аргумента
 function togglePopup(popup) {
     popup.classList.toggle('popup_opened');
+    // описываем хендлер для включения закрытия окна по esc
+    function handler(evt) {
+        if(evt.keyCode === 27) {
+            // закрываем окно
+            popup.classList.toggle('popup_opened');
+            // отключаем хендлер
+            document.removeEventListener('keydown', handler)
+        }
+    }
+    if (popup.style.visibility !== "hidden"){
+        document.addEventListener('keydown', handler);
+    } 
 }
 
 // функция открытия попапа редактирования профиля
@@ -127,3 +139,78 @@ document.querySelectorAll('.popup__close').forEach((button) => {
       togglePopup(event.target.closest('.popup'));
     });
 });
+
+// закрытие кликом на overlay
+document.querySelectorAll('.popup__shade').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      togglePopup(event.target.closest('.popup'));
+    });
+});
+
+////////////////////// валидатор форм редактирования ////////////////////
+const showInputError = (formElement, inputElement, errorMessage) => {
+    const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
+    inputElement.classList.add('popup__text-error');
+    errorElement.textContent = errorMessage;
+    //errorElement.classList.add('popup__input-error');
+  };
+  
+  const hideInputError = (formElement, inputElement) => {
+    const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
+    inputElement.classList.remove('popup__text-error');
+    //errorElement.classList.remove('form__input-error_active');
+    errorElement.textContent = '';
+};
+
+const checkInputValidity = (formElement, inputElement) => {
+    if (!inputElement.validity.valid) {
+      showInputError(formElement, inputElement, inputElement.validationMessage);
+    } else {
+      hideInputError(formElement, inputElement);
+    }
+  };
+
+const setEventListeners = (formElement) => {
+    const inputList = Array.from(formElement.querySelectorAll('.popup__text'));
+    const buttonElement = formElement.querySelector('.popup__button');
+    // чтобы проверить состояние кнопки в самом начале
+    toggleButtonState(inputList, buttonElement);
+    inputList.forEach((inputElement) => {
+      inputElement.addEventListener('input', function () {
+        checkInputValidity(formElement, inputElement);
+        toggleButtonState(inputList, buttonElement);
+      });
+    });
+};
+
+const enableValidation = () => {
+    const formList = Array.from(document.querySelectorAll('.popup__form'));
+    formList.forEach((formElement) => {
+        formElement.addEventListener('submit', function (evt) {
+            evt.preventDefault();
+        });
+        const fieldsetList = Array.from(formElement.querySelectorAll('.popup__form-set'));
+        fieldsetList.forEach((fieldSet) => {
+          setEventListeners(fieldSet);
+        });      
+    });
+};
+
+const hasInvalidInput = (inputList) => {
+    return inputList.some((inputElement) => {
+      return !inputElement.validity.valid;
+    });
+};
+
+const toggleButtonState = (inputList, buttonElement) => {
+    if (hasInvalidInput(inputList)) {
+      buttonElement.classList.add('popup__button_inactive');
+      buttonElement.disabled = true;
+    } else {
+      buttonElement.classList.remove('popup__button_inactive');
+      buttonElement.disabled = false;
+    }
+};
+
+enableValidation();
+////////////////////// конец валидатор форм редактирования ////////////////////
