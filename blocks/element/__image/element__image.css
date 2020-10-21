@@ -1,6 +1,9 @@
 .element__image {
-    /*width: 100%;*/
     border-radius: 10px 10px 0 0;
     max-height: 282px;
     flex-grow: 1;
+}
+
+.element__image:hover {
+    cursor: pointer;
 }
