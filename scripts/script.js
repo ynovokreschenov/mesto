@@ -26,6 +26,7 @@ const initialCards = [
 ];
 
 const ESC_KEYCODE = 27;
+let activePopup = null;
 
 // ЭЛЕМЕНТЫ DOM
 // редактирование профиля
@@ -50,11 +51,20 @@ const popupImageTitle = document.querySelector('.popup__imagetitle'); // опи�
 // делает видимым или скрытым тот попап, который передан ей в качестве аргумента
 function togglePopup(popup) {
     popup.classList.toggle('popup_opened');
-    document.addEventListener('keydown', function (evt) {
-        if(evt.keyCode === ESC_KEYCODE && popup.classList.contains("popup_opened")) {
-            popup.classList.toggle('popup_opened');
-        }
-    });
+    if (popup.classList.contains("popup_opened")) {
+        document.addEventListener('keydown', handleEscPressed);
+        activePopup = popup;
+    }
+    else {
+        document.removeEventListener('keydown', handleEscPressed);
+        activePopup = null;
+    }
+}
+
+let handleEscPressed = function (evt) {
+    if(evt.keyCode === ESC_KEYCODE) {
+        togglePopup(activePopup);
+    }
 }
 
 // функция открытия попапа редактирования профиля
