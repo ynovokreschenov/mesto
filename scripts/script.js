@@ -49,6 +49,8 @@ const popupImageTitle = document.querySelector('.popup__imagetitle'); // опи�
 
 // ФУНКЦИИ
 // делает видимым или скрытым тот попап, который передан ей в качестве аргумента
+let handleEscPressed;
+
 function togglePopup(popup) {
     popup.classList.toggle('popup_opened');
     if (popup.classList.contains("popup_opened")) {
@@ -61,11 +63,11 @@ function togglePopup(popup) {
     }
 }
 
-let handleEscPressed = function (evt) {
+handleEscPressed = function (evt) {
     if(evt.keyCode === ESC_KEYCODE) {
         togglePopup(activePopup);
     }
-}
+};
 
 // функция открытия попапа редактирования профиля
 function openProfileForm() {
