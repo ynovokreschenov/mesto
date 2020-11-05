@@ -1,3 +1,6 @@
+import {Card} from './Card.js';
+import {FormValidator} from './FormValidator.js';
+
 const initialCards = [
     {
         name: 'Архыз',
@@ -25,8 +28,29 @@ const initialCards = [
     }
 ];
 
-const ESC_KEYCODE = 27;
-let activePopup = null;
+// первоначальное заполнение карточками
+const cardElements = document.querySelector('.elements');
+initialCards.forEach((item) => {
+    const card = new Card(item, '.card_template');
+    const cardElement = card.generateCard();
+    cardElements.append(cardElement);
+});
+
+// активация валидаторов
+const validatorElements = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__text',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_inactive',
+    inputErrorClass: 'popup__text-error',
+}
+
+const formList = Array.from(document.querySelectorAll(validatorElements.formSelector));
+
+formList.forEach((form) => {
+    const validator = new FormValidator(validatorElements, form);
+    validator.enableValidation();
+});
 
 // ЭЛЕМЕНТЫ DOM
 // редактирование профиля
@@ -38,7 +62,6 @@ const profileSubtitle = document.querySelector('.profile__subtitle');
 const profilePopupFormSubitle = popupEditProfile.querySelector('#profile_edit_subtitle'); // профессия в попап форме
 
 // добавление карточек
-const cardElements = document.querySelector('.elements'); // блок, содержащий карточки
 const cardPlaceName = document.querySelector('input[name="place-name"]'); // элемент название места на форме добавления карточки
 const cardPlaceLink = document.querySelector('input[name="place-link"]'); // элемент ссылка на фото на форме добавления карточки
 const popupAddPlace = document.querySelector('#add_place'); // попап добавления карточки
@@ -50,8 +73,10 @@ const popupImageTitle = document.querySelector('.popup__imagetitle'); // опи�
 // ФУНКЦИИ
 // делает видимым или скрытым тот попап, который передан ей в качестве аргумента
 let handleEscPressed;
+const ESC_KEYCODE = 27;
+let activePopup = null;
 
-function togglePopup(popup) {
+export function togglePopup(popup) {
     popup.classList.toggle('popup_opened');
     if (popup.classList.contains("popup_opened")) {
         document.addEventListener('keydown', handleEscPressed);
@@ -81,41 +106,6 @@ function openPlaceForm() {
     togglePopup(popupAddPlace);
 }
 
-// функция открытия попапа просмотра фотографии
-function openPlaceView() {
-    togglePopup(popupPlaceView);
-}
-
-// создание карточки из объекта card
-function createCard(card){
-    const cardElement = document.querySelector('#card_template').content.cloneNode(true);
-    cardElement.querySelector('.element__title').textContent = card.name;
-    const elementImage = cardElement.querySelector('.element__image');
-    elementImage.src = card.link;
-    elementImage.alt = card.name;
-    // обработчик лайка для cardElement
-    cardElement.querySelector('.element__like').addEventListener('click', (evt) => {
-        evt.target.classList.toggle('element__like_active');
-    });
-    // обработчик для кнопки удаления карточки
-    cardElement.querySelector('.element__trash').addEventListener('click', (evt) => {
-        evt.target.parentElement.remove();
-    });
-    // обработчик для картинки
-    elementImage.addEventListener('click', (evt) => {
-        popupImage.src = card.link,
-        popupImage.alt = card.name,
-        popupImageTitle.textContent = card.name,
-        openPlaceView(evt);
-    });
-    return cardElement;
-}
-
-// первоначальное заполнение карточками
-initialCards.forEach((item) => {
-    cardElements.append(createCard(item));
-});
-
 // обработчик для формы добавления карточки
 document.querySelector('#card_save_btn').addEventListener('click', (event) => {
     event.preventDefault();
@@ -123,7 +113,10 @@ document.querySelector('#card_save_btn').addEventListener('click', (event) => {
         name: cardPlaceName.value,
         link: cardPlaceLink.value
     };
-    cardElements.prepend(createCard(newCard));
+
+    const card = new Card(newCard, '.card_template');
+    const cardElement = card.generateCard();
+    cardElements.prepend(cardElement);
     togglePopup(popupAddPlace);
 });
 
