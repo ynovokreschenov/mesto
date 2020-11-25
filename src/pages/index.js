@@ -5,50 +5,11 @@ import {Section} from '../components/Section.js';
 import {PopupWithForm} from '../components/PopupWithForm.js';
 import {PopupWithImage} from '../components/PopupWithImage.js';
 import {UserInfo} from '../components/UserInfo.js';
-//import pic from '../images/add-icon.svg'
+import {initialCards} from '../utils/constants.js';
 
-const initialCards = [
-    {
-        name: 'Архыз',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-        name: 'Челябинская область',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-    },
-    {
-        name: 'Иваново',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-        name: 'Камчатка',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-        name: 'Холмогорский район',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-        name: 'Байкал',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-    }
-];
 const cardListSelector = '.elements';
 const buttonEditProfile = document.querySelector('.profile__edit-button'); // кнопка открытия формы профиля
-const cardPlaceName = document.querySelector('input[name="place-name"]'); // элемент название места на форме добавления карточки
-const cardPlaceLink = document.querySelector('input[name="place-link"]'); // элемент ссылка на фото на форме добавления карточки
 const buttonAddPlace = document.querySelector('.profile__add-button'); // кнопка открытия формы добавления карточки
-
-const hidePopup = function (popupElement) {
-    popupElement.classList.remove('popup_opened');
-    document.removeEventListener('keydown', handleEscPressed);
-};
-
-let handleEscPressed = function (evt) {
-    if(evt.code === 'Escape') {
-        hidePopup(document.querySelector('.popup_opened'));
-    }
-};
 
 // функция создания новой карточки
 function card(cardObj) {
@@ -56,50 +17,45 @@ function card(cardObj) {
     return card.generateCard();
 }
 
+const userInfo = new UserInfo({userTitle:'.profile__title', userSubtitle:'.profile__subtitle'});
+
 // кнопка редактирования профиля
-const editProfileCallback = function (evt) {
-    evt.preventDefault();
-    
-    const attrMap = new Map()
-    attrMap.set('popup_title','.profile__title')
-    attrMap.set('popup_subtitle','.profile__subtitle')
-    const formList = new FormData(evt.target.parentElement.parentElement);
-    formList.forEach((value, key) => {
-        document.querySelector(attrMap.get(key)).textContent = value;
+const editProfileCallback = function (data) {
+    const newData = {}
+    const attrMap = new Map();
+    attrMap.set('popup_title','userTitle');
+    attrMap.set('popup_subtitle','userSubtitle');
+    data.forEach((value, key) => {
+        newData[attrMap.get(key)] = value;
     });
+    userInfo.setUserInfo(newData);
 };
 
-let userInfo = new UserInfo({userTitle:'.profile__title', userSubtitle:'.profile__subtitle'});
 
 const editProfile = new PopupWithForm('#edit_profile', editProfileCallback);
-buttonEditProfile.addEventListener('click', (evt) => {
+buttonEditProfile.addEventListener('click', () => {
     editProfile.setEventListeners();
-    editProfile.open(userInfo.getUserInfo(), {userTitle:'#profile_edit_title', userSubtitle:'#profile_edit_subtitle'});
+    const userData = userInfo.getUserInfo()
+    document.querySelector('#profile_edit_title').value = userData.userTitle;
+    document.querySelector('#profile_edit_subtitle').value = userData.userSubtitle;
+    editProfile.open();
 });
 
-// кнопка добавления карточки
-const addPlaceCallback = function (evt) {
-    evt.preventDefault();
-    const newCard = {
-        name: cardPlaceName.value,
-        link: cardPlaceLink.value
-    };
-    //cardElements.prepend(card(newCard));
+const addPlaceCallback = function (data) {
+    const newCard = {}
+    const attrMap = new Map();
+    attrMap.set('place-name','name');
+    attrMap.set('place-link','link');
+    data.forEach((value, key) => {
+        newCard[attrMap.get(key)] = value;
+    });
     cardElements.addItem(card(newCard));
 }
 
 const addPlace = new PopupWithForm('#add_place', addPlaceCallback);
-buttonAddPlace.addEventListener('click', (evt) => {
+buttonAddPlace.addEventListener('click', () => {
     addPlace.setEventListeners();
     addPlace.open();
-});
-
-
-// закрытие кликом на overlay
-document.querySelectorAll('.popup__shade').forEach((button) => {
-    button.addEventListener('click', (event) => {
-        hidePopup(event.target.closest('.popup'));
-    });
 });
 
 // ЗАПОЛНЕНИЕ ДАННЫМИ

@@ -7,31 +7,47 @@ export class PopupWithForm extends Popup {
         this._submitButton = this._popupElement.querySelector('.popup__button');
     }
 
-    _getInputValues(data, selectors){
-        for (let key in data){
-            console.log(data[key]);
+    //_getInputValues(data, selectors){
+    _getInputValues(){
+        /*for (let key in data){
             this._popupForm.querySelector(selectors[key]).value = data[key]
-        }
+        }*/
+        const formList = new FormData(this._popupForm);
+        /*let object = {};
+        formList.forEach(function(value, key){
+            object[key] = value;
+        });
+        return object;*/
+        return formList
     }
 
     setEventListeners(){
         super.setEventListeners();
-        this._submitButton.addEventListener('click', (evt) => {
+        //console.log(this._getInputValues());
+        /*this._submitButton.addEventListener('click', (evt) => {
             this._submitCallback(evt);
+            super.close()
+        });*/
+        this._submitButton.addEventListener('click', (evt) => {
+            //const formData = this._getInputValues();
+            //this._submitCallback(evt);
+            this._submitCallback(this._getInputValues());
+            //console.log(formData);
             super.close()
         });
     }
 
-    open(data, selectors){
+    /*open(data, selectors){
         this._getInputValues(data, selectors);
         super.open()
-    }
+    }*/
 
     close(){
+        this._popupForm.reset();
         super.close()
-        this._popupForm.querySelectorAll('.popup__text').forEach((element) => {
+        /*this._popupForm.querySelectorAll('.popup__text').forEach((element) => {
             element.value = "";
-        });
+        });*/
     }
     
 }
