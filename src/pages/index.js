@@ -33,8 +33,8 @@ const editProfileCallback = function (data) {
 
 
 const editProfile = new PopupWithForm('#edit_profile', editProfileCallback);
+editProfile.setEventListeners();
 buttonEditProfile.addEventListener('click', () => {
-    editProfile.setEventListeners();
     const userData = userInfo.getUserInfo()
     document.querySelector('#profile_edit_title').value = userData.userTitle;
     document.querySelector('#profile_edit_subtitle').value = userData.userSubtitle;
@@ -53,8 +53,8 @@ const addPlaceCallback = function (data) {
 }
 
 const addPlace = new PopupWithForm('#add_place', addPlaceCallback);
+addPlace.setEventListeners();
 buttonAddPlace.addEventListener('click', () => {
-    addPlace.setEventListeners();
     addPlace.open();
 });
 
