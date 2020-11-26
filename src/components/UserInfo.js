@@ -16,8 +16,6 @@ export class UserInfo {
     }
 
     setUserInfo(data){
-        //document.querySelector(this._userTitleSelector).textContent = title;
-        //document.querySelector(this._userSubtitleSelector).textContent = subtitle;
         document.querySelector(this._userTitleSelector).textContent = data.userTitle;
         document.querySelector(this._userSubtitleSelector).textContent = data.userSubtitle;
     }
