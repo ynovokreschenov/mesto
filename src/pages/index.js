@@ -5,7 +5,7 @@ import {Section} from '../components/Section.js';
 import {PopupWithForm} from '../components/PopupWithForm.js';
 import {PopupWithImage} from '../components/PopupWithImage.js';
 import {UserInfo} from '../components/UserInfo.js';
-import {initialCards} from '../utils/constants.js';
+import {Api} from '../components/Api.js';
 
 const cardListSelector = '.elements';
 const buttonEditProfile = document.querySelector('.profile__edit-button'); // кнопка открытия формы профиля
@@ -21,14 +21,16 @@ const userInfo = new UserInfo({userTitle:'.profile__title', userSubtitle:'.profi
 
 // кнопка редактирования профиля
 const editProfileCallback = function (data) {
-    const newData = {}
-    const attrMap = new Map();
-    attrMap.set('popup_title','userTitle');
-    attrMap.set('popup_subtitle','userSubtitle');
-    data.forEach((value, key) => {
-        newData[attrMap.get(key)] = value;
+    api.editUserInfo(data.get('popup_title'), data.get('popup_subtitle'))
+    .then((result) => {
+        const resultData = {};
+        resultData['userTitle'] = result.name;
+        resultData['userSubtitle'] = result.about;
+        userInfo.setUserInfo(resultData);
+    })
+    .catch((err) => {
+        console.log(err);
     });
-    userInfo.setUserInfo(newData);
 };
 
 
@@ -41,15 +43,18 @@ buttonEditProfile.addEventListener('click', () => {
     editProfile.open();
 });
 
+// добавление новой карточки
 const addPlaceCallback = function (data) {
-    const newCard = {}
-    const attrMap = new Map();
-    attrMap.set('place-name','name');
-    attrMap.set('place-link','link');
-    data.forEach((value, key) => {
-        newCard[attrMap.get(key)] = value;
+    api.addNewCard(data.get('place-name'), data.get('place-link'))
+    .then((result) => {
+        const resultData = {};
+        resultData['name'] = result.name;
+        resultData['link'] = result.link;
+        cardElements.addItem(card(resultData));
+    })
+    .catch((err) => {
+        console.log(err);
     });
-    cardElements.addItem(card(newCard));
 }
 
 const addPlace = new PopupWithForm('#add_place', addPlaceCallback);
@@ -58,7 +63,27 @@ buttonAddPlace.addEventListener('click', () => {
     addPlace.open();
 });
 
-// ЗАПОЛНЕНИЕ ДАННЫМИ
+// ЗАПОЛНЕНИЕ ДАННЫМИ С СЕРВЕРА
+const api = new Api({
+    baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-18',
+    headers: {
+        authorization: '91702f05-7054-404f-bd0f-d5812d156063',
+        'Content-Type': 'application/json'
+    }
+});
+// заполняем профиль данными с сервера
+api.getUserInfo()
+    .then((result) => {
+        document.querySelector('.profile__title').textContent = result.name;
+        document.querySelector('.profile__subtitle').textContent = result.about;
+        const profileAvatar = document.querySelector('.profile__avatar');
+        profileAvatar.src = result.avatar;
+        profileAvatar.alt = result.name;
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+
 // создадим объект попапа просмотра фотографии
 const cardPopup = new PopupWithImage('#image_view');
 cardPopup.setEventListeners();
@@ -66,17 +91,25 @@ const handleCardClick = function (link, name) {
     cardPopup.open(link, name);
 };
 
-const cardElements = new Section({
-    items: initialCards,
-    renderer: (item) => {
-        const card = new Card(item, '.card_template', handleCardClick)
-        const cardElement = card.generateCard();
-        cardElements.addItem(cardElement);
-    }},
-    cardListSelector
-    );
-
-cardElements.renderItems();
+// получим данные карточек с сервера
+let cardElements = null;
+api.getInitialCards()
+    .then((items) => {
+        cardElements = new Section({
+            items: items,
+            renderer: (item) => {
+                const card = new Card(item, '.card_template', handleCardClick)
+                const cardElement = card.generateCard();
+                cardElements.addItem(cardElement);
+            }},
+            cardListSelector
+            );
+        cardElements.renderItems();
+        //console.log(items);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 
 // активация валидаторов
 const validatorElements = {
@@ -93,3 +126,4 @@ formList.forEach((form) => {
     const validator = new FormValidator(validatorElements, form);
     validator.enableValidation();
 });
+

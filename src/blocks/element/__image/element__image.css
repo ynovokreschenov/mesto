@@ -2,6 +2,7 @@
     border-radius: 10px 10px 0 0;
     max-height: 282px;
     flex-grow: 1;
+    object-fit: cover;
 }
 
 .element__image:hover {
