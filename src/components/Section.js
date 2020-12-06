@@ -8,6 +8,10 @@ export class Section {
     addItem(element) {
       this._container.prepend(element);
     }
+
+    removeItem(element){
+      this._container.remove(element);
+    }
   
     clear() {
       this._container.innerHTML = '';

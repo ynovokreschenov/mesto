@@ -32,5 +32,5 @@ export class Popup {
         document.removeEventListener('keydown', this._handleEscClose);
         this._popupElement.classList.remove('popup_opened');
     }
-  }
+}
   

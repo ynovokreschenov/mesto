@@ -1,4 +1,5 @@
 @import url(./__close/popup__close.css);
+@import url(./__close/popup_close_confirm_delete.css);
 @import url(./__form/popup__form.css);
 @import url(./__header/popup__header.css);
 @import url(./__text/popup__text.css);
@@ -12,6 +13,7 @@
 @import url(./__input-error/popup__input-error.css);
 @import url(./__text/popup__text-error.css);
 @import url(./__form-set/popup__form-set.css);
+@import url(./__close/popup__close_edit_avatar.css);
 
 .popup {
     font-family: Inter, Arial, sans-serif;

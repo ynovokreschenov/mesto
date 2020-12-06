@@ -10,10 +10,12 @@ import {Api} from '../components/Api.js';
 const cardListSelector = '.elements';
 const buttonEditProfile = document.querySelector('.profile__edit-button'); // кнопка открытия формы профиля
 const buttonAddPlace = document.querySelector('.profile__add-button'); // кнопка открытия формы добавления карточки
+const buttonEditAvatar = document.querySelector('.profile__avatar-edit-button'); // кнопка открытия формы редактирования аватара
+const profileAvatar = document.querySelector('.profile__avatar');
 
 // функция создания новой карточки
 function card(cardObj) {
-    const card = new Card(cardObj, '.card_template', handleCardClick);
+    const card = new Card(cardObj, '.card_template', handleCardClick, handleDeleteClick, handleLikeClick);
     return card.generateCard();
 }
 
@@ -21,6 +23,7 @@ const userInfo = new UserInfo({userTitle:'.profile__title', userSubtitle:'.profi
 
 // кнопка редактирования профиля
 const editProfileCallback = function (data) {
+    editProfile.renderLoading(true);
     api.editUserInfo(data.get('popup_title'), data.get('popup_subtitle'))
     .then((result) => {
         const resultData = {};
@@ -30,6 +33,9 @@ const editProfileCallback = function (data) {
     })
     .catch((err) => {
         console.log(err);
+    })
+    .finally(() => {
+        editProfile.renderLoading(false);
     });
 };
 
@@ -43,8 +49,30 @@ buttonEditProfile.addEventListener('click', () => {
     editProfile.open();
 });
 
+// редактирование аватара
+const editAvatarCallback = function (data) {
+    editAvatar.renderLoading(true);
+    api.editAvatar(data.get('avatar-link'))
+    .then((result) => {
+        profileAvatar.src = result.avatar;
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+    .finally(() => {
+        editAvatar.renderLoading(false);
+    });
+};
+
+const editAvatar = new PopupWithForm('#edit_avatar', editAvatarCallback);
+editAvatar.setEventListeners();
+buttonEditAvatar.addEventListener('click', () => {
+    editAvatar.open();
+});
+
 // добавление новой карточки
 const addPlaceCallback = function (data) {
+    addPlace.renderLoading(true);
     api.addNewCard(data.get('place-name'), data.get('place-link'))
     .then((result) => {
         const resultData = {};
@@ -54,6 +82,9 @@ const addPlaceCallback = function (data) {
     })
     .catch((err) => {
         console.log(err);
+    })
+    .finally(() => {
+        addPlace.renderLoading(false);
     });
 }
 
@@ -62,6 +93,51 @@ addPlace.setEventListeners();
 buttonAddPlace.addEventListener('click', () => {
     addPlace.open();
 });
+
+// удаление карточки
+const confirmDeleteCallback = function (data) {
+    api.deleteCard(data.get('card_id'))
+    .then((result) => {
+        // удалить элемент из интерфейса
+        if (result.message === "Пост удалён"){
+            document.querySelector(`div[id='${data.get('card_id')}']`).remove();  
+        }
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+}
+
+// создадим объект попапа удаления карточки
+const deletePlace = new PopupWithForm('#confirm_delete', confirmDeleteCallback);
+deletePlace.setEventListeners();
+const handleDeleteClick = function (card) {
+    document.querySelector('#card_id').value = card.getId();
+    deletePlace.open();
+};
+
+// обработчик лайков
+const handleLikeClick = function (card) {
+    const cardId = card.getId();
+    const cardElement = document.querySelector(`div[id='${cardId}']`);
+    if (Array.from(cardElement.querySelector('.element__like').classList).includes("element__like_active")){
+        api.dislikeCard(cardId)
+        .then((result) => {
+            card.toggleLikeState(result.likes.length);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    } else {
+        api.likeCard(cardId)
+        .then((result) => {
+            card.toggleLikeState(result.likes.length);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }
+};
 
 // ЗАПОЛНЕНИЕ ДАННЫМИ С СЕРВЕРА
 const api = new Api({
@@ -76,7 +152,7 @@ api.getUserInfo()
     .then((result) => {
         document.querySelector('.profile__title').textContent = result.name;
         document.querySelector('.profile__subtitle').textContent = result.about;
-        const profileAvatar = document.querySelector('.profile__avatar');
+        //const profileAvatar = document.querySelector('.profile__avatar');
         profileAvatar.src = result.avatar;
         profileAvatar.alt = result.name;
     })
@@ -98,14 +174,13 @@ api.getInitialCards()
         cardElements = new Section({
             items: items,
             renderer: (item) => {
-                const card = new Card(item, '.card_template', handleCardClick)
+                const card = new Card(item, '.card_template', handleCardClick, handleDeleteClick, handleLikeClick)
                 const cardElement = card.generateCard();
                 cardElements.addItem(cardElement);
             }},
             cardListSelector
             );
         cardElements.renderItems();
-        //console.log(items);
     })
     .catch((err) => {
         console.log(err);

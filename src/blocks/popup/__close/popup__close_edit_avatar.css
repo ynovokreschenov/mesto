@@ -1,0 +1,4 @@
+.popup__close_edit_avatar{
+    top: calc(50% - 185px);
+    left: calc(50% + 203px);
+}

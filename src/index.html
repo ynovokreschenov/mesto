@@ -13,7 +13,10 @@
         </header>
         <main class="content">
             <section class="profile">
-                <img class="profile__avatar" src="" alt="">
+                <div class="profile__avatar-wrap">
+                    <img class="profile__avatar" src="" alt="">
+                    <button type="button" class="profile__avatar-edit-button" aria-label="Редактировать"></button>
+                </div>
                 <div class="profile__info">
                     <div class="profile__title-wrap">
                         <h1 class="profile__title"></h1>
@@ -31,7 +34,7 @@
         </footer>
     </div>
     <template class="card_template" id="card_template">
-        <div class="element">
+        <div class="element" id="">
             <button type="button" class="element__trash" aria-label="Удалить"></button>
             <img class="element__image" src="" alt="">
             <div class="element__text">
@@ -57,6 +60,18 @@
             </fieldset>
         </form>
     </section>
+    <section class="popup" id="edit_avatar">
+        <div class="popup__shade"></div>
+        <button type="button" class="popup__close popup__close_edit_avatar" aria-label="Закрыть"></button>
+        <form class="popup__form" name="popup_form" novalidate>
+            <h3 class="popup__header">Обновить аватар</h3>
+            <fieldset class="popup__form-set">
+                <input type="url" class="popup__text" name="avatar-link" id="add_place_link" value="" placeholder="Ссылка на картинку" required>
+                <span class='popup__input-error' id='add_place_link-error'></span>
+                <button type="submit" class="popup__button" id="avatar_save_btn">Сохранить</button>
+            </fieldset>
+        </form>
+    </section>
     <section class="popup" id="add_place">
         <div class="popup__shade"></div>
         <button type="button" class="popup__close" aria-label="Закрыть"></button>
@@ -78,6 +93,17 @@
             <img class="popup__image" src="" alt="">
             <p class="popup__imagetitle"></p>
         </div>
+    </section>
+    <section class="popup" id="confirm_delete">
+        <div class="popup__shade"></div>
+        <button type="button" class="popup__close popup_close_confirm_delete" aria-label="Закрыть"></button>
+        <form class="popup__form" name="popup_form">
+            <h3 class="popup__header">Вы уверены?</h3>
+            <fieldset class="popup__form-set">
+                <input class="popup__text" id="card_id" name="card_id" value="" hidden>
+                <button type="button" class="popup__button" id="confirm_delete_btn">Да</button>
+            </fieldset>
+        </form>
     </section>
 <script type="module" src="pages/index.js"></script>
 </body>
