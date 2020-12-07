@@ -10,6 +10,7 @@ export class Api {
         })
         .then(response => {
             if (response.ok) {
+                Promise.resolve();
                 return response.json();
             }
             return Promise.reject(`Ошибка: ${response.status}`);
@@ -39,6 +40,7 @@ export class Api {
         })
         .then(response => {
             if (response.ok) {
+                Promise.resolve();
                 return response.json();
             }
             return Promise.reject(`Ошибка: ${response.status}`);

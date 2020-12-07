@@ -8,14 +8,21 @@ import {UserInfo} from '../components/UserInfo.js';
 import {Api} from '../components/Api.js';
 
 const cardListSelector = '.elements';
-const buttonEditProfile = document.querySelector('.profile__edit-button'); // кнопка открытия формы профиля
+// попап редактирования профиля
+const profileEditTitle = document.querySelector('#profile_edit_title'); //имя
+const profileEditSubtitle = document.querySelector('#profile_edit_subtitle'); //профессия
+const buttonEditProfile = document.querySelector('.profile__edit-button'); //кнопка
 const buttonAddPlace = document.querySelector('.profile__add-button'); // кнопка открытия формы добавления карточки
 const buttonEditAvatar = document.querySelector('.profile__avatar-edit-button'); // кнопка открытия формы редактирования аватара
+// профиль пользователя
 const profileAvatar = document.querySelector('.profile__avatar');
+const profileTitle = document.querySelector('.profile__title');
+const profileSubtitle = document.querySelector('.profile__subtitle');
+let userID;
 
 // функция создания новой карточки
-function card(cardObj) {
-    const card = new Card(cardObj, '.card_template', handleCardClick, handleDeleteClick, handleLikeClick);
+function createCard(cardObj) {
+    const card = new Card(cardObj, '.card_template', handleCardClick, handleDeleteClick, handleLikeClick, userID);
     return card.generateCard();
 }
 
@@ -30,6 +37,7 @@ const editProfileCallback = function (data) {
         resultData['userTitle'] = result.name;
         resultData['userSubtitle'] = result.about;
         userInfo.setUserInfo(resultData);
+        editProfile.close();
     })
     .catch((err) => {
         console.log(err);
@@ -44,8 +52,8 @@ const editProfile = new PopupWithForm('#edit_profile', editProfileCallback);
 editProfile.setEventListeners();
 buttonEditProfile.addEventListener('click', () => {
     const userData = userInfo.getUserInfo()
-    document.querySelector('#profile_edit_title').value = userData.userTitle;
-    document.querySelector('#profile_edit_subtitle').value = userData.userSubtitle;
+    profileEditTitle.value = userData.userTitle;
+    profileEditSubtitle.value = userData.userSubtitle;
     editProfile.open();
 });
 
@@ -55,6 +63,7 @@ const editAvatarCallback = function (data) {
     api.editAvatar(data.get('avatar-link'))
     .then((result) => {
         profileAvatar.src = result.avatar;
+        editAvatar.close();
     })
     .catch((err) => {
         console.log(err);
@@ -75,10 +84,8 @@ const addPlaceCallback = function (data) {
     addPlace.renderLoading(true);
     api.addNewCard(data.get('place-name'), data.get('place-link'))
     .then((result) => {
-        const resultData = {};
-        resultData['name'] = result.name;
-        resultData['link'] = result.link;
-        cardElements.addItem(card(resultData));
+        cardElements.addItem(createCard(result));
+        addPlace.close();
     })
     .catch((err) => {
         console.log(err);
@@ -100,8 +107,9 @@ const confirmDeleteCallback = function (data) {
     .then((result) => {
         // удалить элемент из интерфейса
         if (result.message === "Пост удалён"){
-            document.querySelector(`div[id='${data.get('card_id')}']`).remove();  
+            document.querySelector(`div[id='${data.get('card_id')}']`).remove();
         }
+        deletePlace.close();
     })
     .catch((err) => {
         console.log(err);
@@ -148,11 +156,11 @@ const api = new Api({
     }
 });
 // заполняем профиль данными с сервера
-api.getUserInfo()
+const getUserInfo = api.getUserInfo()
     .then((result) => {
-        document.querySelector('.profile__title').textContent = result.name;
-        document.querySelector('.profile__subtitle').textContent = result.about;
-        //const profileAvatar = document.querySelector('.profile__avatar');
+        userID = result._id;
+        profileTitle.textContent = result.name;
+        profileSubtitle.textContent = result.about;
         profileAvatar.src = result.avatar;
         profileAvatar.alt = result.name;
     })
@@ -169,22 +177,25 @@ const handleCardClick = function (link, name) {
 
 // получим данные карточек с сервера
 let cardElements = null;
-api.getInitialCards()
+const getInitialCards = api.getInitialCards()
     .then((items) => {
         cardElements = new Section({
             items: items,
             renderer: (item) => {
-                const card = new Card(item, '.card_template', handleCardClick, handleDeleteClick, handleLikeClick)
-                const cardElement = card.generateCard();
-                cardElements.addItem(cardElement);
+                cardElements.addItem(createCard(item));
             }},
             cardListSelector
             );
-        cardElements.renderItems();
+        //cardElements.renderItems();
     })
     .catch((err) => {
         console.log(err);
     });
+
+Promise.all([getUserInfo, getInitialCards])
+    .then((results) => {
+        cardElements.renderItems();
+    }); 
 
 // активация валидаторов
 const validatorElements = {
